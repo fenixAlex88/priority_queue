@@ -3,7 +3,6 @@ package ru.clevertec.utils.queue;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 public class CustomPriorityQueue<E> implements CustomQueue<E> {
     private static final int INITIAL_CAPACITY = 8;
@@ -21,6 +20,10 @@ public class CustomPriorityQueue<E> implements CustomQueue<E> {
 
     public CustomPriorityQueue() {
         this(INITIAL_CAPACITY, null);
+    }
+
+    public CustomPriorityQueue(int capacity) {
+        this(capacity, null);
     }
 
     public CustomPriorityQueue(Comparator<? super E> comparator) {
@@ -56,18 +59,17 @@ public class CustomPriorityQueue<E> implements CustomQueue<E> {
     }
 
     @Override
-    public boolean add(E e) {
-        try {
-            if (size == heap.length) {
-                resize();
-            }
-            heap[size] = e;
-            siftUp(size);
-            size++;
-            return true;}
-        catch (Exception ex){
-            return false;
+    public boolean add(E el) {
+        if (el == null) {
+            throw new IllegalArgumentException("Element should not be null");
         }
+        if (size == heap.length) {
+            resize();
+        }
+        heap[size] = el;
+        siftUp(size);
+        size++;
+        return true;
     }
 
     @Override
@@ -143,7 +145,7 @@ public class CustomPriorityQueue<E> implements CustomQueue<E> {
     }
 
     private void resize() {
-        heap = Arrays.copyOf(heap, heap.length * 2);
+        heap = Arrays.copyOf(heap, heap.length == 0 ? INITIAL_CAPACITY : heap.length * 2);
     }
 
     @Override
